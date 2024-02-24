@@ -24,14 +24,32 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Update a student by ID
+
 router.put('/:id', async (req, res) => {
-    // Implement update logic here
+    try {
+        const studentId = req.params.id;
+        const updatedData = req.body;
+        const updatedStudent = await Student.findByIdAndUpdate(studentId, updatedData, { new: true });
+        if (!updatedStudent) {
+            return res.status(404).send({ message: "Student Doen't Exist" });
+        }
+        res.status(200).send(updatedStudent);
+    } catch (err) {
+        res.status(400).send(err);
+    }
 });
 
-// Delete a student by ID
 router.delete('/:id', async (req, res) => {
-    // Implement delete logic here
+    try {
+        const studentId = req.params.id;
+        const deletedStudent = await Student.findByIdAndDelete(studentId);
+        if (!deletedStudent) {
+            return res.status(404).send({ message: "Student Doen't Exist" });
+        }
+        res.status(200).send({ message: "Student Successfully" });
+    } catch (err) {
+        res.status(400).send(err);
+    }
 });
 
 module.exports = router;
